@@ -1,5 +1,6 @@
-import { format } from 'date-fns';
 import { GetStaticProps } from 'next';
+import Link from 'next/link';
+import { format } from 'date-fns';
 import { FiCalendar, FiUser } from 'react-icons/fi';
 
 import { getPrismicClient } from '../services/prismic';
@@ -31,18 +32,22 @@ const Home: React.FC<HomeProps> = ({ postsPagination }) => {
     <main className={commonStyles.container}>
       {postsPagination.results.map(post => (
         <div className={styles.post} key={post.uid}>
-          <h1>{post.data.title}</h1>
-          <h2>{post.data.subtitle}</h2>
-          <div>
-            <span>
-              <FiCalendar />
-              <span>{post.first_publication_date}</span>
-            </span>
-            <span>
-              <FiUser />
-              <span>{post.data.author}</span>
-            </span>
-          </div>
+          <Link href={`/post/${post.uid}`}>
+            <a>
+              <h1>{post.data.title}</h1>
+              <h2>{post.data.subtitle}</h2>
+              <div>
+                <span>
+                  <FiCalendar />
+                  <span>{post.first_publication_date}</span>
+                </span>
+                <span>
+                  <FiUser />
+                  <span>{post.data.author}</span>
+                </span>
+              </div>
+            </a>
+          </Link>
         </div>
       ))}
 
