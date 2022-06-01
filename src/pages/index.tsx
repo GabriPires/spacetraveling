@@ -1,5 +1,5 @@
 import { GetStaticProps } from 'next';
-import Image from 'next/image';
+import { FiCalendar, FiUser } from 'react-icons/fi';
 
 import { getPrismicClient } from '../services/prismic';
 
@@ -27,8 +27,55 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = () => {
   return (
-    <main>
-      <h1>Home</h1>
+    <main className={commonStyles.container}>
+      <div className={styles.post}>
+        <h1>Como utilizar Hooks</h1>
+        <p>Resumo do artigo vai ficar aqui</p>
+        <div>
+          <span>
+            <FiCalendar />
+            <span>15 Mar 2022</span>
+          </span>
+          <span>
+            <FiUser />
+            <span>Fernando Oliveira</span>
+          </span>
+        </div>
+      </div>
+
+      <div className={styles.post}>
+        <h1>Como utilizar Hooks</h1>
+        <p>Resumo do artigo vai ficar aqui</p>
+        <div>
+          <span>
+            <FiCalendar />
+            <span>15 Mar 2022</span>
+          </span>
+          <span>
+            <FiUser />
+            <span>Fernando Oliveira</span>
+          </span>
+        </div>
+      </div>
+
+      <div className={styles.post}>
+        <h1>Como utilizar Hooks</h1>
+        <p>Resumo do artigo vai ficar aqui</p>
+        <div>
+          <span>
+            <FiCalendar />
+            <span>15 Mar 2022</span>
+          </span>
+          <span>
+            <FiUser />
+            <span>Fernando Oliveira</span>
+          </span>
+        </div>
+      </div>
+
+      <button type="button" className={styles.loadMoreButton}>
+        Carregar mais posts
+      </button>
     </main>
   );
 };

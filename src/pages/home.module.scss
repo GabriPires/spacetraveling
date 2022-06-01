@@ -1,0 +1,59 @@
+.post {
+  max-width: 600px;
+
+  & + div {
+    margin-top: 3rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    color: var(--gray-100);
+  }
+
+  p {
+    font-size: 1.125rem;
+    color: var(--gray-300);
+    line-height: 1.313rem;
+    margin-top: 0.5rem;
+  }
+
+  div {
+    margin-top: 1.5rem;
+    display: flex;
+
+
+    span {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      span {
+        font-size: 0.875rem;
+        color: var(--gray-400);
+      }
+
+      &:first-child {
+        margin-right: 1.5rem;
+      }
+
+      svg {
+        margin-right: 0.5rem;
+      }
+    }
+  }
+}
+
+.loadMoreButton {
+  background: none;
+  border: none;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--pink-500);
+  transition: filter 0.2s;
+
+  &:hover {
+    filter: opacity(0.8)
+  }
+
+  margin-top: 4rem;
+}
