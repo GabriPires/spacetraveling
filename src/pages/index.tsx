@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { GetStaticProps } from 'next';
 import { FiCalendar, FiUser } from 'react-icons/fi';
 
@@ -17,7 +18,7 @@ interface Post {
 }
 
 interface PostPagination {
-  next_page: string;
+  next_page?: string;
   results: Post[];
 }
 
@@ -25,66 +26,63 @@ interface HomeProps {
   postsPagination: PostPagination;
 }
 
-const Home: React.FC<HomeProps> = () => {
+const Home: React.FC<HomeProps> = ({ postsPagination }) => {
   return (
     <main className={commonStyles.container}>
-      <div className={styles.post}>
-        <h1>Como utilizar Hooks</h1>
-        <p>Resumo do artigo vai ficar aqui</p>
-        <div>
-          <span>
-            <FiCalendar />
-            <span>15 Mar 2022</span>
-          </span>
-          <span>
-            <FiUser />
-            <span>Fernando Oliveira</span>
-          </span>
+      {postsPagination.results.map(post => (
+        <div className={styles.post} key={post.uid}>
+          <h1>{post.data.title}</h1>
+          <h2>{post.data.subtitle}</h2>
+          <div>
+            <span>
+              <FiCalendar />
+              <span>{post.first_publication_date}</span>
+            </span>
+            <span>
+              <FiUser />
+              <span>{post.data.author}</span>
+            </span>
+          </div>
         </div>
-      </div>
+      ))}
 
-      <div className={styles.post}>
-        <h1>Como utilizar Hooks</h1>
-        <p>Resumo do artigo vai ficar aqui</p>
-        <div>
-          <span>
-            <FiCalendar />
-            <span>15 Mar 2022</span>
-          </span>
-          <span>
-            <FiUser />
-            <span>Fernando Oliveira</span>
-          </span>
-        </div>
-      </div>
-
-      <div className={styles.post}>
-        <h1>Como utilizar Hooks</h1>
-        <p>Resumo do artigo vai ficar aqui</p>
-        <div>
-          <span>
-            <FiCalendar />
-            <span>15 Mar 2022</span>
-          </span>
-          <span>
-            <FiUser />
-            <span>Fernando Oliveira</span>
-          </span>
-        </div>
-      </div>
-
-      <button type="button" className={styles.loadMoreButton}>
-        Carregar mais posts
-      </button>
+      {postsPagination.next_page && (
+        <button type="button" className={styles.loadMoreButton}>
+          Carregar mais posts
+        </button>
+      )}
     </main>
   );
 };
 
 export default Home;
 
-// export const getStaticProps = async () => {
-//   // const prismic = getPrismicClient({});
-//   // const postsResponse = await prismic.getByType(TODO);
+export const getStaticProps: GetStaticProps = async () => {
+  const prismic = getPrismicClient({});
+  const postsResponse = await prismic.getByType('posts', {
+    fetch: ['posts'],
+    pageSize: 2,
+  });
 
-//   // TODO
-// };
+  const postsPagination: PostPagination = {
+    next_page: postsResponse.next_page,
+    results: postsResponse.results.map(result => ({
+      data: {
+        author: result.data.author,
+        title: result.data.title,
+        subtitle: result.data.subtitle,
+      },
+      uid: result.uid,
+      first_publication_date: format(
+        new Date(result.first_publication_date),
+        'dd LLL yyyy'
+      ),
+    })),
+  };
+
+  return {
+    props: {
+      postsPagination,
+    },
+  };
+};
