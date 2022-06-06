@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
@@ -10,8 +11,10 @@ import styles from './post.module.scss';
 
 interface Post {
   first_publication_date: string | null;
+  uid: string;
   data: {
     title: string;
+    subtitle: string;
     banner: {
       url: string;
     };
@@ -50,7 +53,11 @@ const Post: React.FC<PostProps> = ({ post }) => {
           <div className={styles.info}>
             <span>
               <FiCalendar />
-              <span>{post.first_publication_date}</span>
+              <span>
+                {format(new Date(post.first_publication_date), 'dd MMM yyyy', {
+                  locale: ptBR,
+                })}
+              </span>
             </span>
             <span>
               <FiUser />
@@ -104,19 +111,16 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const post: Post = {
     data: {
       title: response.data.title,
+      subtitle: response.data.subtitle,
       author: response.data.author,
       banner: response.data.banner,
       content: response.data.content.map(content => ({
         heading: content.heading,
-        body: content.body.map(body => ({
-          text: body.text,
-        })),
+        body: content.body,
       })),
     },
-    first_publication_date: format(
-      new Date(response.first_publication_date),
-      'dd LLL yyyy'
-    ),
+    uid: response.uid,
+    first_publication_date: response.first_publication_date,
   };
 
   return {
