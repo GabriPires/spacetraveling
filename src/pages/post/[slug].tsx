@@ -51,7 +51,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
             </span>
             <span>
               <FiClock />
-              <span>4 minutos</span>
+              <span>4 min</span>
             </span>
           </div>
 
@@ -74,8 +74,17 @@ const Post: React.FC<PostProps> = ({ post }) => {
 export default Post;
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const prismic = getPrismicClient({});
+  const posts = await prismic.getByType('posts');
+
+  const paths = posts.results.map(post => ({
+    params: {
+      slug: post.uid,
+    },
+  }));
+
   return {
-    paths: [],
+    paths,
     fallback: 'blocking',
   };
 };
