@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 
 import { getPrismicClient } from '../../services/prismic';
@@ -29,6 +30,12 @@ interface PostProps {
 }
 
 const Post: React.FC<PostProps> = ({ post }) => {
+  const { isFallback } = useRouter();
+
+  if (isFallback) {
+    return <p>Carregando...</p>;
+  }
+
   return (
     <main>
       <img
