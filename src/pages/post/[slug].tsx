@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import { RichText } from 'prismic-dom';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 
 import { getPrismicClient } from '../../services/prismic';
@@ -35,6 +36,15 @@ interface PostProps {
 const Post: React.FC<PostProps> = ({ post }) => {
   const { isFallback } = useRouter();
 
+  const estimatedTime = Math.ceil(
+    post.data.content.reduce((acc, content) => {
+      const data = RichText.asText(content.body);
+      const time = data.trim().split(/\s+/).length;
+
+      return time + acc;
+    }, 0) / 200
+  );
+
   if (isFallback) {
     return <p>Carregando...</p>;
   }
@@ -65,7 +75,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
             </span>
             <span>
               <FiClock />
-              <span>4 min</span>
+              <span>{estimatedTime} min</span>
             </span>
           </div>
 
