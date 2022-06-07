@@ -2,6 +2,7 @@ import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { FiCalendar, FiUser } from 'react-icons/fi';
+import { ptBR } from 'date-fns/locale';
 
 import { getPrismicClient } from '../services/prismic';
 
@@ -39,7 +40,13 @@ const Home: React.FC<HomeProps> = ({ postsPagination }) => {
               <div>
                 <span>
                   <FiCalendar />
-                  <span>{post.first_publication_date}</span>
+                  <span>
+                    {format(
+                      new Date(post.first_publication_date),
+                      'dd LLL yyyy',
+                      { locale: ptBR }
+                    )}
+                  </span>
                 </span>
                 <span>
                   <FiUser />
@@ -78,10 +85,7 @@ export const getStaticProps: GetStaticProps = async () => {
         subtitle: result.data.subtitle,
       },
       uid: result.uid,
-      first_publication_date: format(
-        new Date(result.first_publication_date),
-        'dd LLL yyyy'
-      ),
+      first_publication_date: result.first_publication_date,
     })),
   };
 
